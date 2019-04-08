@@ -18,6 +18,7 @@ opwins = 0 #integer to represent how many times the AI opponent has won
 playerwins = 0 #integer to represent how many times the player has won
 rules = []
 rules_in_play= []
+
 if len(discard_pile) > 0:
     discard_card = discard_pile[-1]
 for rule in rules:
@@ -42,6 +43,7 @@ def draw(ran, person): # variable "ran" represents range (or number of cards dra
                 if [i][0] in range(2, 11):
                     card = str(deck[i][0], "of", deck[i][1])
                     hand.append(card)
+                    print(card)
                 elif [i][0] == 11:
                     card = str("Jack of ", deck[i][1])
                     print(card)
@@ -129,22 +131,23 @@ def your_turn(): #The player takes their turn
     for c in hand:
         print(c)
     print("There is a "+ discard_card + " in the discard pile.")
-    n = input(str('What card would you like to play?\nIf you have no cards to play, type "draw"'))
+    n = input(str('What card would you like to play?\nIf you have no cards to play, type "draw" '))
     con = False
     while con != True: 
         for card in hand:
             if n == card:
-                hand.remove(card)
-                discard_pile.append(card)
+                if n[1] == card[1] or n[-2] == card[-2]: 
+                    hand.remove(card)
+                    discard_pile.append(card)
                 con = True
-            elif n == "false":
+            elif n == "draw":
                 draw(1, "player")
                 con == True
         print("That card is not in your hand, try again!")
         print("Cards in your hand:")
         for c in hand:
             print(c)
-        n = input(str("What card would you like to play?"))
+        n = input(str("What card would you like to play? "))
     shuffle()
     if len(hand) < 2:
         print("You have one card left! You call Mau. This round is over. You win!")
@@ -176,7 +179,7 @@ def opp_turn(): #The opponent takes their turn
     con = False
     while con != True:
         for card in ophand:
-            if discard_card[3] == card[3]:
+            if discard_card[1] == card[1] or discard_card[-2] == card[-2]:
                 discard_pile.append(card)
                 ophand.remove(card)
                 con == True
