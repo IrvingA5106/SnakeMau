@@ -9,12 +9,21 @@ import itertools, random
 
 # make a deck of cards
 deck = list(itertools.product(range(1,14),['Spades','Hearts','Diamonds','Clubs']))
-hand = []
-ophand = []
-discard_pile = []
+hand = [] #list to represent player's hand
+ophand = [] #list to represent opponent's hand
+discard_pile = [] #list to represent pile where played cards go
+original = []
+rounds = 0 #integer to represent how many rounds have been played
+opwins = 0 #integer to represent how many times the AI opponent has won
+playerwins = 0 #integer to represent how many times the player has won
+rules = []
+rules_in_play= []
 if len(discard_pile) > 0:
     discard_card = discard_pile[-1]
-rounds = 0
+for rule in rules:
+    if rule in rules_in_play:
+        rules.remove(rule)
+
 
 def shuffle():
     # shuffle the cards in your deck
@@ -91,14 +100,19 @@ def draw(ran, person): # variable "ran" represents range (or number of cards dra
             
 def setup(): #Setting up the game and going over the rules
     print("Ready to play a game of Mau?\nThis game plays with multiple decks, so do not be surprised if you draw a card more than once.")
-    print("You and your opponent each drew 5 cards.")
-    r = input("Do you know the rules of Mau? y/n")
-    if r == "y":
-        print("Now begins the game of Mau.")
-    elif r == "n":
-        print("The first rule of the game of Mau is that you do not share the rules of Mau.")
-        print('Really persistent? Go to "https://en.wikipedia.org/wiki/Mao_(card_game)" to learn the basic rules of the game.')
-        print("Now begins the game of Mau.")
+    if rounds == 0:    
+        r = input("Do you know the rules of Mau? y/n")
+        if r == "y":
+            print("Now begins the game of Mau.")
+        elif r == "n":
+            print("The first rule of the game of Mau is that you do not share the rules of Mau.")
+            print('Really persistent? Go to "https://en.wikipedia.org/wiki/Mao_(card_game)" to learn the basic rules of the game.')
+    else:
+        print("The deck has been shuffled for the new round.")
+    hand == original
+    ophand == original
+    
+    print("Now begins the game of Mau.")
     shuffle()
     draw(7,"player")
     draw(7,"opponent")
@@ -106,6 +120,7 @@ def setup(): #Setting up the game and going over the rules
     draw(1, "discard")
     print("There is a " + discard_card + " in the discard pile.")
     shuffle()
+    your_turn()
     
 def your_turn(): #The player takes their turn
     print("It is your turn.")
@@ -131,9 +146,31 @@ def your_turn(): #The player takes their turn
             print(c)
         n = input(str("What card would you like to play?"))
     shuffle()
-    opp_turn()
+    if len(hand) < 2:
+        print("You have one card left! You call Mau. This round is over. You win!")
+        rounds + 1
+        playerwins + 1
+        c = False
+        while c != False:
+            n = input(str("Would you like to play again? y/n"))
+            if n == "y" or n == "Y":
+                #rule_function
+                c = True
+            elif n == "n" or n == "N":
+                print("Thanks for playing!")
+                if playerwins > opwins:
+                    print("You won by " + str(playerwins-opwins) + " rounds.")
+                elif opwins < playerwins:
+                    print("Your opponent won by " + str(opwins-playerwins) + "rounds.")
+                elif playerwins == opwins:
+                    print("You and your opponent tied. Good game!")
+                c = True
+            else:
+                print("Sorry, could you repeat that?\nWould you like to play again? y/n")
+    else:
+        opp_turn()
          
-def opp_turn():
+def opp_turn(): #The opponent takes their turn
     print("It is your opponent's turn")
     draw(1, "opponent")
     con = False
@@ -147,18 +184,26 @@ def opp_turn():
         con == True
     shuffle()
     if len(ophand) < 2: 
-       print("Your opponent calls Mau. This round is over. They win.\nA new rule has been added.")
-       rounds += 1
-       setup()
-        
-    
-                        
-    
-    
-    
-    
-    
-    
-    
-    
+        print("Your opponent calls Mau. This round is over. They win.")
+        rounds + 1
+        opwins + 1
+        c = False
+        while c != False:
+            n = input(str("Would you like to play again? y/n"))
+            if n == "y":
+                #rule_function
+                c = True
+            elif n == "n":
+                print("Thanks for playing!")
+                if playerwins > opwins:
+                    print("You won by " + str(playerwins-opwins) + " rounds.")
+                elif opwins < playerwins:
+                    print("Your opponent won by " + str(opwins-playerwins) + "rounds.")
+                elif playerwins == opwins:
+                    print("You and your opponent tied. Good game!")
+                c = True
+            else:
+                print("Sorry, could you repeat that?\nWould you like to play again? y/n")
+    else:
+        your_turn()
         
