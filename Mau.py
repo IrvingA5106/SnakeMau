@@ -11,16 +11,16 @@ import itertools, random
 deck = list(itertools.product(range(1,14),['Spades','Hearts','Diamonds','Clubs']))
 hand = [] #list to represent player's hand
 ophand = [] #list to represent opponent's hand
-discard_pile = [] #list to represent pile where played cards go
-original = []
+discard_pile = ["none"] #list to represent pile where played cards go
+original = [] #empty list to reset other lists
 rounds = 0 #integer to represent how many rounds have been played
 opwins = 0 #integer to represent how many times the AI opponent has won
 playerwins = 0 #integer to represent how many times the player has won
 rules = []
 rules_in_play= []
 
-if len(discard_pile) > 0:
-    discard_card = discard_pile[-1]
+
+discard_card = discard_pile[-1]
 for rule in rules:
     if rule in rules_in_play:
         rules.remove(rule)
@@ -33,31 +33,31 @@ def shuffle():
 # draw function to draw cards from deck
 def draw(ran, person): # variable "ran" represents range (or number of cards drawn) and "person" represents who is drawing the card 
     
+    drawn = False
     if person == "player": # The player draws cards
         print("You draw a card.")
         # draw a card
         print("You got:\n")
-        drawn = False
         while drawn == False:
             for i in range(ran):
                 if [i][0] in range(2, 11):
-                    card = str(deck[i][0], "of", deck[i][1])
+                    card =(str(deck[i][0]) + "of" + str(deck[i][1]))
                     hand.append(card)
                     print(card)
                 elif [i][0] == 11:
-                    card = str("Jack of ", deck[i][1])
+                    card =("Jack of " + str(deck[i][1]))
                     print(card)
                     hand.append(card)
-                elif deck[i][0] == 12:
-                    card = str("Queen of ", deck[i][1])
+                elif str(deck[i][0]) == 12:
+                    card =("Queen of "+ str(deck[i][1]))
                     print(card)
                     hand.append(card)
-                elif deck[i][0] == 13:
-                    card = str("King of ", deck[i][1])
+                elif str(deck[i][0]) == 13:
+                    card =("King of " +str(deck[i][1]))
                     print(card)
                     hand.append(card)
-                elif deck[i][0] == 1:
-                    card = str("Ace of ", deck[i][1])
+                elif str(deck[i][0]) == 1:
+                    card =("Ace of " + str(deck[i][1]))
                     print(card)
                     hand.append(card)
             drawn = True
@@ -65,19 +65,19 @@ def draw(ran, person): # variable "ran" represents range (or number of cards dra
         while drawn == False:
             for i in range(ran):
                 if [i][0] in range(2, 11):
-                    card = str(deck[i][0], "of", deck[i][1])
+                    card =(str(deck[i][0]) + "of" + str(deck[i][1]))
                     ophand.append(card)
                 elif [i][0] == 11:
-                    card = str("Jack of ", deck[i][1])
+                    card =("Jack of " + str(deck[i][1]))
                     ophand.append(card)
-                elif deck[i][0] == 12:
-                    card = str("Queen of ", deck[i][1])
+                elif [i][0] == 12:
+                    card =("Queen of " + str(deck[i][1]))
                     ophand.append(card)
-                elif deck[i][0] == 13:
-                    card = str("King of ", deck[i][1])
+                elif [i][0] == 13:
+                    card =("King of "+ str(deck[i][1]))
                     ophand.append(card)
-                elif deck[i][0] == 1:
-                    card = str("Ace of ", deck[i][1])
+                elif str(deck[i][0]) == 1:
+                    card =("Ace of " + str(deck[i][1]))
                     ophand.append(card)
             drawn = True
             if ran > 1:
@@ -85,25 +85,32 @@ def draw(ran, person): # variable "ran" represents range (or number of cards dra
             elif ran == 1:
                 print("Your opponent drew a card.")
     elif person == "discard":
+        if "none" in discard_pile:
+            discard_pile.remove("none")
         for i in range(ran):
             if [i][0] in range(2, 11):
-                card = str(deck[i][0], "of", deck[i][1])
+                card =(str(deck[i][0])+ "of"+ str(deck[i][1]))
+                discard_pile.append(card)
             elif [i][0] == 11:
-                card = str("Jack of ", deck[i][1])
-            elif deck[i][0] == 12:
-                card = str("Queen of ", deck[i][1])
-            elif deck[i][0] == 13:
-                card = str("King of ", deck[i][1])
-            elif deck[i][0] == 1:
-                card = str("Ace of ", deck[i][1])
-            discard_pile.append(card)        
+                card =("Jack of "+ str(deck[i][1]))
+                discard_pile.append(card)
+            elif str(deck[i][0]) == 12:
+                card =("Queen of "+ str(deck[i][1]))
+                discard_pile.append(card)
+            elif str(deck[i][0]) == 13:
+                card =("King of "+ str(deck[i][1]))
+                discard_pile.append(card)  
+            elif str(deck[i][0]) == 1:
+                card =("Ace of "+ str(deck[i][1]))
+                discard_pile.append(card)
+                                        
     shuffle()
     
             
 def setup(): #Setting up the game and going over the rules
     print("Ready to play a game of Mau?\nThis game plays with multiple decks, so do not be surprised if you draw a card more than once.")
     if rounds == 0:    
-        r = input("Do you know the rules of Mau? y/n")
+        r = raw_input("Do you know the rules of Mau? y/n ")
         if r == "y":
             print("Now begins the game of Mau.")
         elif r == "n":
@@ -131,7 +138,7 @@ def your_turn(): #The player takes their turn
     for c in hand:
         print(c)
     print("There is a "+ discard_card + " in the discard pile.")
-    n = input(str('What card would you like to play?\nIf you have no cards to play, type "draw" '))
+    n = raw_input('What card would you like to play?\nIf you have no cards to play, type "draw" ')
     con = False
     while con != True: 
         for card in hand:
@@ -147,7 +154,7 @@ def your_turn(): #The player takes their turn
         print("Cards in your hand:")
         for c in hand:
             print(c)
-        n = input(str("What card would you like to play? "))
+        n = raw_input("What card would you like to play? ")
     shuffle()
     if len(hand) < 2:
         print("You have one card left! You call Mau. This round is over. You win!")
@@ -155,7 +162,7 @@ def your_turn(): #The player takes their turn
         playerwins + 1
         c = False
         while c != False:
-            n = input(str("Would you like to play again? y/n"))
+            n = raw_input("Would you like to play again? y/n")
             if n == "y" or n == "Y":
                 #rule_function
                 c = True
