@@ -11,7 +11,7 @@ import itertools, random
 deck = list(itertools.product(range(1,14),['Spades','Hearts','Diamonds','Clubs']))
 hand = [] #list to represent player's hand
 ophand = [] #list to represent opponent's hand
-discard_pile = ["none"] #list to represent pile where played cards go
+discard_pile = ["bsolutely nothing"] #list to represent pile where played cards go
 original = [] #empty list to reset other lists
 rounds = 0 #integer to represent how many rounds have been played
 opwins = 0 #integer to represent how many times the AI opponent has won
@@ -37,11 +37,11 @@ def draw(ran, person): # variable "ran" represents range (or number of cards dra
     if person == "player": # The player draws cards
         print("You draw a card.")
         # draw a card
-        print("You got:\n")
+        #print("You got:\n")
         while drawn == False:
             for i in range(ran):
                 if [i][0] in range(2, 11):
-                    card =(str(deck[i][0]) + "of" + str(deck[i][1]))
+                    card =(str(deck[i][0]) + " of " + str(deck[i][1]))
                     hand.append(card)
                     print(card)
                 elif [i][0] == 11:
@@ -125,7 +125,7 @@ def setup(): #Setting up the game and going over the rules
     shuffle()
     draw(7,"player")
     draw(7,"opponent")
-    print("You and your opponent each drew 7 cards.")
+    #print("You and your opponent each drew 7 cards.") REPETITIVE
     draw(1, "discard")
     print("There is a " + discard_card + " in the discard pile.")
     shuffle()
@@ -216,4 +216,4 @@ def opp_turn(): #The opponent takes their turn
                 print("Sorry, could you repeat that?\nWould you like to play again? y/n")
     else:
         your_turn()
-        
+setup()
